@@ -36,7 +36,7 @@ class UserController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            $error = 'Unable to create a new user.';
+            $error = 'Falha ao criar usuário.';
             Logger::log($th, $error);
 
             return response()->json(["error" => $th], 500);
@@ -46,15 +46,24 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(int $user)
     {
-        //
+        try {
+            $user = User::findOrFail($user);
+
+            return new UserResource($user);
+        } catch (\Throwable $th) {
+            $error = 'Usuário não encontrado.';
+            Logger::log($th, $error);
+
+            return response()->json(["error" => $error], 400);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request, int $user)
     {
         //
     }
