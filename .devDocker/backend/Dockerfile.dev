@@ -14,10 +14,11 @@ RUN apt update && apt install -y \
     unzip \
     libonig-dev \
     libzip-dev \
+    libpq-dev \
     zip
 
 # PHP extensions installation
-RUN docker-php-ext-install pdo_mysql mbstring zip
+RUN docker-php-ext-install pdo_pgsql mbstring zip
 
 # Composer - Composer instalation
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
