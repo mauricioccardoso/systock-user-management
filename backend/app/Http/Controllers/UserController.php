@@ -29,6 +29,7 @@ class UserController extends Controller
         DB::beginTransaction();
         try {
             $user = User::create($request->except(['password_confirmation']));
+
             DB::commit();
 
             return new UserResource($user);
@@ -52,6 +53,7 @@ class UserController extends Controller
             $user = User::findOrFail($user);
 
             return new UserResource($user);
+
         } catch (\Throwable $th) {
             $error = 'Usuário não encontrado.';
             Logger::log($th, $error);
@@ -63,9 +65,27 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, int $user)
+    public function update(UpdateUserRequest $request, int $userId)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $user = User::findOrFail($userId);
+
+            $data = $request->except(['password_confirmation']);
+            $user->update($data);
+
+            DB::commit();
+
+            return new UserResource($user);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            $error = 'Falha ao atualizar usuário.';
+            Logger::log($th, $error);
+
+            return response()->json(["error" => $error], 400);
+        }
     }
 
     /**
