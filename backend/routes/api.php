@@ -1,7 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/login', function() {
-    return response()->json(["login" => true]);
-});
+Route::apiResource('user', UserController::class);
