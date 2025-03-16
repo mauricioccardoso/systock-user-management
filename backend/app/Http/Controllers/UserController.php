@@ -47,10 +47,10 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $user)
+    public function show(int $userId)
     {
         try {
-            $user = User::findOrFail($user);
+            $user = User::findOrFail($userId);
 
             return new UserResource($user);
 
@@ -67,19 +67,15 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, int $userId)
     {
-        DB::beginTransaction();
         try {
             $user = User::findOrFail($userId);
 
             $data = $request->except(['password_confirmation']);
             $user->update($data);
 
-            DB::commit();
-
             return new UserResource($user);
 
         } catch (\Throwable $th) {
-            DB::rollBack();
 
             $error = 'Falha ao atualizar usuário.';
             Logger::log($th, $error);
@@ -91,8 +87,20 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(int $userId)
     {
-        //
+        try {
+            $user = User::findOrFail($userId);
+
+            $user->delete();
+
+            return response()->json([], 204);
+
+        } catch (\Throwable $th) {
+            $error = 'Falha ao deletar o usuário.';
+            Logger::log($th, $error);
+
+            return response()->json(["error" => $error], 400);
+        }
     }
 }
