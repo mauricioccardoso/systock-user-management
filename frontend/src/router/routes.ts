@@ -1,12 +1,12 @@
 import AuthView from '@/views/AuthView.vue'
 import HomeView from '@/views/HomeView.vue'
+import RegisterView from '@/views/RegisterView.vue'
 import type { RouteRecordRaw } from 'vue-router'
 
 export const routes: ReadonlyArray<RouteRecordRaw> = [
   {
     path: '/',
     redirect: '/home',
-    component: HomeView,
     meta: { requiresAuth: true },
     children: [
       {
@@ -17,17 +17,15 @@ export const routes: ReadonlyArray<RouteRecordRaw> = [
     ],
   },
   {
-    path: '/auth',
-    name: 'auth',
-    redirect: '/login',
+    path: '/login',
+    name: 'login',
     component: AuthView,
     meta: { isGuest: true },
-    children: [
-      {
-        path: '/login',
-        name: 'login',
-        component: AuthView,
-      },
-    ],
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: RegisterView,
+    meta: { isGuest: true },
   },
 ]

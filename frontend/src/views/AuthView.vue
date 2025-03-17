@@ -44,7 +44,7 @@
           class="text-blue text-decoration-none"
           href="#"
           rel="noopener noreferrer"
-          target="_blank"
+          @click..prevent="toRegister()"
         >
           Criar conta?
         </a>
@@ -52,7 +52,6 @@
     </v-card>
   </v-container>
 </template>
-
 <script setup lang="ts">
 import router from '@/router'
 import httpApiClient from '@/service'
@@ -91,5 +90,9 @@ const login = async () => {
   sessionStorage.setItem('ACCESS_TOKEN', data.token)
   userDataStore.setUserData(data.user)
   await router.push({ name: 'home' })
+}
+
+const toRegister = () => {
+  router.push({ name: 'register' })
 }
 </script>
