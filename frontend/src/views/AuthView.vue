@@ -1,5 +1,5 @@
 <template>
-  <v-container class="mt-16">
+  <v-container>
     <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
       <v-img class="mx-auto my-6" max-width="100" src="../../public/favicon.ico"></v-img>
       <div class="text-subtitle-1 text-medium-emphasis">Email</div>
@@ -75,7 +75,7 @@ const rules = {
 }
 
 const userDataStore = useUserDataStore()
-const notificationStore = useNotificationStore()
+const { showNotification } = useNotificationStore()
 
 const login = async () => {
   if (!credencials.value.email || !credencials.value.password) {
@@ -92,13 +92,13 @@ const login = async () => {
     })
 
   if (data && (data as AxiosError).isAxiosError) {
-    notificationStore.showNotification('Credenciais inválidas', 'error', 'Erro!')
+    showNotification('Credenciais inválidas', 'error', 'Erro!')
     return
   }
 
   sessionStorage.setItem('ACCESS_TOKEN', data.token)
   userDataStore.setUserData(data.user)
-  notificationStore.showNotification('Login realizado', 'success', 'Sucesso')
+  showNotification('Login realizado', 'success', 'Sucesso')
   await router.push({ name: 'home' })
 }
 
