@@ -80,8 +80,11 @@
 <script setup lang="ts">
 import router from '@/router'
 import httpApiClient from '@/service'
+import { useNotificationStore } from '@/stores/notification.store'
 import type { AxiosError, AxiosResponse } from 'axios'
 import { ref } from 'vue'
+
+const notificationStore = useNotificationStore()
 
 const userData = ref({
   name: '',
@@ -123,11 +126,11 @@ const register = async () => {
     })
 
   if (data && (data as AxiosError).isAxiosError) {
+    notificationStore.showNotification('Falha ao se cadastrar', 'error', 'Erro!')
     return
   }
 
-  console.log('criado com sucesso')
-
+  notificationStore.showNotification('Cadastro realizado com sucesso', 'success', 'Sucesso')
   await router.push({ name: 'login' })
 }
 

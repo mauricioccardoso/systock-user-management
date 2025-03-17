@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { configRoutesAuth } from './ConfigRoutesAuth'
+import { configRoutesAuth } from './configRoutesAuth'
 import { routes } from './routes'
 
 const router = createRouter({
