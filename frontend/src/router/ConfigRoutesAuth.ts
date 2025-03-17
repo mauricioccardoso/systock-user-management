@@ -12,7 +12,7 @@ export async function configRoutesAuth(to: any, from: any, next: any): Promise<v
   }
 
   if (to.meta.requiresAuth && !isAuth) {
-    next({ name: 'auth' })
+    next({ name: 'login' })
   } else if (to.meta.isGuest && isAuth) {
     next({ name: 'home' })
   } else {
