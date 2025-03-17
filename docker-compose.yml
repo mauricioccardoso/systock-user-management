@@ -1,0 +1,51 @@
+services:
+  app-frontend:
+    build:
+      context: .devDocker/frontend
+      dockerfile: Dockerfile.dev
+    container_name: app-frontend
+    command: wait-for app-db:5432 -t 120 -- /usr/local/bin/start.sh
+    restart: unless-stopped
+    ports:
+      - "8081:5173"
+    volumes:
+      - ./frontend:/home/node/frontend
+    networks:
+      - app-network
+
+  app-api:
+    build:
+      context: .devDocker/backend
+      dockerfile: Dockerfile.dev
+    container_name: app-api
+    restart: unless-stopped
+    command: wait-for app-db:5432 -t 120 -- /usr/local/bin/start.sh
+    env_file:
+      - ./backend/.env
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend:/home/php/backend
+    depends_on:
+      - app-db
+    networks:
+      - app-network
+
+  app-db:
+    build:
+      context: .devDocker/database
+      dockerfile: Dockerfile.db.dev
+    container_name: app-db
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    ports:
+      - "8083:5432"
+    volumes:
+      - ./.devDocker/database/_dbData:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
