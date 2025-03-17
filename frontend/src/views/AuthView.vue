@@ -1,6 +1,6 @@
 <template>
-  <v-container>
-    <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
+  <v-container class="d-flex justify-center align-center fill-height w-auto">
+    <v-card class="pa-12 pb-8 w-100 w-sm-75 w-lg-50 w-xl-25" elevation="8" rounded="lg">
       <v-img class="mx-auto my-6" max-width="100" src="../../public/favicon.ico"></v-img>
       <div class="text-subtitle-1 text-medium-emphasis">Email</div>
 
@@ -17,8 +17,8 @@
       >
         Senha
         <a class="text-caption text-decoration-none text-blue" href="#" rel="noopener noreferrer">
-          Esqueceu a senha?</a
-        >
+          Esqueceu a senha?
+        </a>
       </div>
 
       <v-text-field
@@ -52,6 +52,7 @@
     </v-card>
   </v-container>
 </template>
+
 <script setup lang="ts">
 import router from '@/router'
 import httpApiClient from '@/service'
@@ -62,8 +63,8 @@ import { ref, type Ref } from 'vue'
 
 const showPass: Ref<boolean> = ref(false)
 const credencials: Ref<{ email: string; password: string }> = ref({
-  email: '',
-  password: '',
+  email: 'mauricio@mail.com',
+  password: 'Erickdk11',
 })
 
 const rules = {
