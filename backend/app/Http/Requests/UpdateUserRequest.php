@@ -3,8 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -13,6 +15,11 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        $user = Auth::user();
+        if ($user->id != $this->route('user')) {
+            throw new HttpException(403, 'Não autorizado');
+        }
+
         return true;
     }
 

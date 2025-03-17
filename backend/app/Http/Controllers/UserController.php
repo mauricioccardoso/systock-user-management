@@ -7,7 +7,9 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class UserController extends Controller
 {
@@ -49,6 +51,10 @@ class UserController extends Controller
      */
     public function show(int $userId)
     {
+        if (Auth::user()->id != $userId) {
+            throw new HttpException(403, 'Não autorizado');
+        }
+
         try {
             $user = User::findOrFail($userId);
 
@@ -92,6 +98,10 @@ class UserController extends Controller
      */
     public function destroy(int $userId)
     {
+        if (Auth::user()->id != $userId) {
+            throw new HttpException(403, 'Não autorizado');
+        }
+
         try {
             $user = User::findOrFail($userId);
 
