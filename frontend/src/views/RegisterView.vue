@@ -1,5 +1,5 @@
 <template>
-  <v-container class="mt-16">
+  <v-container>
     <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
       <v-img class="mx-auto my-6" max-width="100" src="../../public/favicon.ico"></v-img>
 
