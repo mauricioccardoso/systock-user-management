@@ -6,7 +6,7 @@
 
       <v-text-field
         v-model="credencials.email"
-        :rules="[rules.required, rules.min]"
+        :rules="[rules.required, rules.emailValidate]"
         density="compact"
         placeholder="Insira seu email"
         variant="outlined"
@@ -55,6 +55,7 @@
 <script setup lang="ts">
 import router from '@/router'
 import httpApiClient from '@/service'
+import { useNotificationStore } from '@/stores/notification.store'
 import { useUserDataStore } from '@/stores/user.store'
 import type { AxiosError, AxiosResponse } from 'axios'
 import { ref, type Ref } from 'vue'
@@ -67,13 +68,20 @@ const credencials: Ref<{ email: string; password: string }> = ref({
 
 const rules = {
   required: (value: any) => !!value || 'Obrigatório.',
+  emailValidate: (value: string) =>
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value) || 'Email inválido',
   min: (v: any) => v.length >= 8 || 'Min. 8 characters',
   emailMatch: () => `Credenciais inválidas`,
 }
 
 const userDataStore = useUserDataStore()
+const notificationStore = useNotificationStore()
 
 const login = async () => {
+  if (!credencials.value.email || !credencials.value.password) {
+    return
+  }
+
   const data = await httpApiClient
     .post('/login', credencials.value)
     .then(({ data }: AxiosResponse) => {
@@ -84,11 +92,13 @@ const login = async () => {
     })
 
   if (data && (data as AxiosError).isAxiosError) {
+    notificationStore.showNotification('Credenciais inválidas', 'error', 'Erro!')
     return
   }
 
   sessionStorage.setItem('ACCESS_TOKEN', data.token)
   userDataStore.setUserData(data.user)
+  notificationStore.showNotification('Login realizado', 'success', 'Sucesso')
   await router.push({ name: 'home' })
 }
 

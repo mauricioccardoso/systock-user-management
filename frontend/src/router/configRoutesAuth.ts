@@ -1,19 +1,19 @@
 // import { useAuthDataStore } from '@/stores/AuthDataStore'
 
 import httpApiClient from '@/service'
-import { useAuthDataStore } from '@/stores/AuthDataStore'
+import { useAuthDataStore } from '@/stores/authData.store'
 import type { AxiosError, AxiosResponse } from 'axios'
 
 export async function configRoutesAuth(to: any, from: any, next: any): Promise<void> {
-  const { isAuth } = useAuthDataStore()
+  let authDataStore = useAuthDataStore()
 
-  if (sessionStorage.getItem('ACCESS_TOKEN') && !isAuth) {
+  if (sessionStorage.getItem('ACCESS_TOKEN') && !authDataStore.isAuth) {
     await checkToken()
   }
 
-  if (to.meta.requiresAuth && !isAuth) {
+  if (to.meta.requiresAuth && !authDataStore.isAuth) {
     next({ name: 'login' })
-  } else if (to.meta.isGuest && isAuth) {
+  } else if (to.meta.isGuest && authDataStore.isAuth) {
     next({ name: 'home' })
   } else {
     next()
@@ -33,9 +33,9 @@ async function checkToken(): Promise<void> {
     })
 
   if (data && (data as AxiosError).isAxiosError) {
-    setIsAuth(false)
+    await setIsAuth(false)
     return
   }
 
-  setIsAuth(true)
+  await setIsAuth(true)
 }
