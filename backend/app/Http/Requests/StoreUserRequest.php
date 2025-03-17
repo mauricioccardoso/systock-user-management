@@ -29,6 +29,11 @@ class StoreUserRequest extends FormRequest
                 'email',
                 'unique:users,email'
             ],
+            'cpf' => [
+                'required',
+                'size:11',
+                'unique:users,cpf'
+            ],
             'password' => [
                 'required',
                 'confirmed',
@@ -53,6 +58,10 @@ class StoreUserRequest extends FormRequest
 
             'email.email' => 'O email deve ser um endereço de email válido.',
             'email.unique' => 'Este email já está registrado.',
+
+            'cpf.required' => 'O campo CPF é obrigatório.',
+            'cpf.size' => 'O CPF deve ter 11 caracteres.',
+            'cpf.unique' => 'Este CPF já está registrado.',
 
             'password.required' => 'O campo senha é obrigatório.',
             'password.confirmed' => 'As senhas não corresponde.',

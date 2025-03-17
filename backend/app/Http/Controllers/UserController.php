@@ -70,7 +70,10 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($userId);
 
-            $data = $request->except(['password_confirmation']);
+            $data = array_filter(
+                $request->except(['password_confirmation']),
+                fn($value) => !is_null($value)
+            );
             $user->update($data);
 
             return new UserResource($user);

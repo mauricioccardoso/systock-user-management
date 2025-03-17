@@ -31,6 +31,11 @@ class UpdateUserRequest extends FormRequest
                 'email',
                 Rule::unique('users')->ignore($userId),
             ],
+            'cpf' => [
+                'nullable',
+                'size:11',
+                Rule::unique('users')->ignore($userId),
+            ],
             'password' => [
                 'nullable',
                 'confirmed',
@@ -54,6 +59,9 @@ class UpdateUserRequest extends FormRequest
         return [
             'email.email' => 'O email deve ser um endereço de email válido.',
             'email.unique' => 'Este email já está registrado.',
+
+            'cpf.cpf' => 'O CPF deve ter 11 caracteres.',
+            'cpf.unique' => 'Este CPF já está registrado.',
 
             'password.min' => 'A senha deve ter pelo menos :min caracteres.',
             'password_confirmation.required_if' => 'O campo confirmação de senha é obrigatório.',
