@@ -9,10 +9,11 @@ if [ -e /home/node/frontend/package.json ]; then
   npm install
   echo -e "\n\e[32m Dependencies installed \e[0m"
 
-  echo -e "\e[32;1m Keeping the container up \e[0m"
-  tail -f /dev/null
+  # echo -e "\e[32;1m Keeping the container up \e[0m"
+  # tail -f /dev/null
 
-  # npm run dev
+  echo -e "\e[32m Running the server on port 8081 \e[0m"
+  npm run dev
 else
   echo -e "\e[33;1m *** Warning - Project or file package.json does not exist *** \e[0m"
 
